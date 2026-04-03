@@ -1,5 +1,5 @@
 -- ============================================================
--- Joe's Property Engine — Supabase Schema
+-- Property Engine — Supabase Schema
 -- ============================================================
 -- Run this in your Supabase SQL editor (Dashboard > SQL Editor)
 -- or via the Supabase CLI: supabase db push
