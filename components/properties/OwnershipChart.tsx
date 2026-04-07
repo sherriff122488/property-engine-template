@@ -6,6 +6,7 @@ import Link from 'next/link'
 type Property = {
   id: string
   name: string
+  address?: string | null
   entity_name: string | null
   status: string
 }
@@ -80,7 +81,7 @@ export function OwnershipChart({ entityEntries }: { entityEntries: EntityEntry[]
                           className="rounded-lg border border-stone-200 dark:border-stone-600 bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 px-3 py-2 text-center text-xs transition-all whitespace-nowrap hover:border-[#CF7454] hover:shadow-sm"
                           style={{ minWidth: '140px' }}
                         >
-                          {p.name}
+                          {p.address ?? p.name}
                         </div>
                       </Link>
                     </div>
