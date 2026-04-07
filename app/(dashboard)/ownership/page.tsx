@@ -8,11 +8,11 @@ export default async function OwnershipPage() {
   const supabase = await createClient()
   const { data: properties } = await supabase
     .from("properties")
-    .select("id, name, entity_name, status")
+    .select("id, name, address, entity_name, status")
     .order("entity_name")
     .order("name")
 
-  type PropertyRow = { id: string; name: string; entity_name: string | null; status: string }
+  type PropertyRow = { id: string; name: string; address: string | null; entity_name: string | null; status: string }
   // Group by entity_name
   const entityMap = new Map<string, PropertyRow[]>()
   for (const p of properties ?? []) {
