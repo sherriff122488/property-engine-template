@@ -139,6 +139,8 @@ export default async function DashboardPage() {
     { data: reviewScoreData },
     { data: recentPropertyData },
     { data: incomeData },
+    { data: entityPropertyData },
+    { data: allMortgageDebtData },
   ] = await Promise.all([
     // All property statuses for counting
     supabase.from("properties").select("status"),
@@ -206,6 +208,8 @@ export default async function DashboardPage() {
 
     // Monthly income for cashflow & yield
     supabase.from("properties").select("estimated_monthly_income").not("estimated_monthly_income", "is", null),
+    supabase.from("properties").select("id, entity_name, current_value").not("current_value", "is", null),
+    supabase.from("mortgages").select("property_id, loan_balance").not("loan_balance", "is", null),
   ])
 
   // ── Status counts ──────────────────────────────────────────────────────
@@ -386,6 +390,38 @@ export default async function DashboardPage() {
       </div>
 
       {/* ── Unified reminders panel ──────────────────────────────────── */}
+      {matthewTotalEquity > 0 && (
+        <div className="mt-6 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 shadow-sm overflow-hidden">
+          <div className="flex items-center gap-2 border-b border-stone-100 dark:border-stone-700 px-5 py-4">
+            <Wallet className="h-4 w-4 text-stone-500 dark:text-stone-400" />
+            <h2 className="text-sm font-semibold text-stone-900 dark:text-stone-100">Matthew&apos;s equity breakdown</h2>
+          </div>
+          <div className="grid grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0 divide-stone-100 dark:divide-stone-700">
+            <div className="px-5 py-4">
+              <p className="text-xs font-medium text-stone-500 dark:text-stone-400">Personal (direct)</p>
+              <p className="mt-1 text-2xl font-semibold text-stone-900 dark:text-stone-100">
+                £{Math.round(matthewDirectEquity).toLocaleString('en-GB')}
+              </p>
+              <p className="mt-0.5 text-xs text-stone-400 dark:text-stone-500">Matthew Sherriff (direct ownership)</p>
+            </div>
+            <div className="px-5 py-4">
+              <p className="text-xs font-medium text-stone-500 dark:text-stone-400">Via P.I.G (50% of SPH)</p>
+              <p className="mt-1 text-2xl font-semibold text-stone-900 dark:text-stone-100">
+                £{Math.round(matthewPIGEquity).toLocaleString('en-GB')}
+              </p>
+              <p className="mt-0.5 text-xs text-stone-400 dark:text-stone-500">50% of SPH equity (£{Math.round(sphEquity).toLocaleString('en-GB')} total)</p>
+            </div>
+            <div className="px-5 py-4 bg-stone-50 dark:bg-stone-700/30">
+              <p className="text-xs font-medium text-stone-500 dark:text-stone-400">Matthew&apos;s total equity</p>
+              <p className="mt-1 text-2xl font-semibold" style={{ color: '#CF7454' }}>
+                £{Math.round(matthewTotalEquity).toLocaleString('en-GB')}
+              </p>
+              <p className="mt-0.5 text-xs text-stone-400 dark:text-stone-500">direct + P.I.G share combined</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mt-8 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 shadow-sm overflow-hidden">
         <SectionHeader
           icon={Clock}
